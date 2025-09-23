@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "description": "Shopware 6 n8n community node",
     "license": "MIT",
-    "homepage": "https://example.com",
+    "homepage": "https://n8n.io",
     "keywords": [
         "n8n-community-node-package"
     ],
@@ -13,7 +13,7 @@
     },
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "https://github.com/Fatjon-Gash1/n8n-nodes-shopware"
     },
    "scripts": {
 		"build": "n8n-node build",
