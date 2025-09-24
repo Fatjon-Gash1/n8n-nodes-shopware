@@ -14,7 +14,7 @@ export class ShopwareOAuth2Api implements ICredentialType {
 
 	documentationUrl = 'https://docs.shopware.com/en/shopware-6-en/settings/system/integrationen';
 
-	icon = { light: 'file:shopware.png', dark: 'file:shopware.png' } as const;
+	icon = { light: 'file:../shopware.png', dark: 'file:../shopware.png' } as const;
 
 	properties: INodeProperties[] = [
 		{

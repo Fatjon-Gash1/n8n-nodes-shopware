@@ -7,7 +7,7 @@ export const versionDescription: INodeTypeDescription = {
 	displayName: 'Shopware',
 	name: 'shopware',
 	// eslint-disable-next-line n8n-nodes-base/node-class-description-icon-not-svg
-	icon: 'file:shopware.png',
+	icon: 'file:../../../shopware.png',
 	group: ['input'],
 	version: [1],
 	subtitle: '={{ $parameter["operation"] + ": " + $parameter["resource"] }}',
@@ -29,7 +29,7 @@ export const versionDescription: INodeTypeDescription = {
 			name: 'resource',
 			type: 'options',
 			noDataExpression: true,
-            required: true,
+			required: true,
 			options: [
 				{
 					name: 'Product',
