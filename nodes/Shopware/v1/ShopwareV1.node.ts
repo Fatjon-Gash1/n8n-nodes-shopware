@@ -7,6 +7,7 @@ import type {
 
 import { router } from './actions/router';
 import { versionDescription } from './actions/versionDescription';
+import { loadOptions } from './methods';
 
 export class ShopwareV1 implements INodeType {
 	description: INodeTypeDescription;
@@ -18,6 +19,10 @@ export class ShopwareV1 implements INodeType {
 			usableAsTool: true,
 		};
 	}
+
+	methods = {
+		loadOptions,
+	};
 
 	async execute(this: IExecuteFunctions) {
 		return await router.call(this);
