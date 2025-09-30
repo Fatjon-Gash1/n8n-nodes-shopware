@@ -2,33 +2,37 @@ import {
 	type INodeExecutionData,
 	type INodeProperties,
 	type IExecuteFunctions,
+	type JsonObject,
 	NodeApiError,
 	updateDisplayOptions,
 } from 'n8n-workflow';
 import { apiRequest } from '../../transport';
+import { productFields } from './fields';
+import { wrapData } from '../../helpers/utils';
 
 const properties: INodeProperties[] = [
 	{
-		displayName: 'Options',
-		name: 'options',
-		type: 'collection',
-		default: {},
-		description: 'Additional options which decide which products should be returned',
-		placeholder: 'Add option',
-		options: [
-			{
-				// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-dynamic-multi-options
-				displayName: 'Filter Fields',
-				name: 'filterFields',
-				type: 'multiOptions',
-				typeOptions: {
-					loadOptionsMethod: 'getProductFields',
-				},
-				default: [],
-				// eslint-disable-next-line n8n-nodes-base/node-param-description-wrong-for-dynamic-multi-options
-				description: 'The fields to filter products by',
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		type: 'number',
+		displayOptions: {
+			show: {
+				returnAll: [false],
 			},
-		],
+		},
+		typeOptions: {
+			minValue: 1,
+			maxValue: 500,
+		},
+		default: 50,
+		description: 'Max number of results to return',
 	},
 ];
 
@@ -49,17 +53,45 @@ export async function execute(
 
 	for (let i = 0; i < items.length; i++) {
 		try {
-			const responseData = await apiRequest.call(this, 'GET', `product`);
+			let page = 1;
+			let pageSize = 50;
+			let iterate = true;
 
-			// const options = this.getNodeParameter('options', 0, {});
+			const returnAll = this.getNodeParameter('returnAll', i);
+			if (!returnAll) {
+				pageSize = this.getNodeParameter('limit', i);
+			}
 
-			returnData.push(responseData);
+			while (iterate) {
+				const body = {
+					page,
+					limit: pageSize,
+					fields: productFields,
+					includes: {
+						product: productFields,
+					},
+				};
+				const response = await apiRequest.call(this, 'POST', `/search/product`, body);
+
+				const executionData = this.helpers.constructExecutionMetaData(wrapData(response.data), {
+					itemData: { item: i },
+				});
+
+				returnData.push(...executionData);
+
+				if (returnAll && response.data.length === pageSize) {
+					page++;
+				} else {
+					iterate = false;
+				}
+			}
 		} catch (error) {
 			if (this.continueOnFail()) {
 				returnData.push({ json: { error: error.message } });
 				continue;
 			}
-			throw new NodeApiError(this.getNode(), { error: error.message });
+
+			throw new NodeApiError(this.getNode(), error as JsonObject);
 		}
 	}
 
