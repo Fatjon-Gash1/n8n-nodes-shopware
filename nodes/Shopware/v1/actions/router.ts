@@ -1,9 +1,19 @@
 import type { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
-import { NodeOperationError } from 'n8n-workflow';
-
-import * as product from './product/Product.resource';
 import type { ShopwareType } from './node.type';
+import { NodeOperationError } from 'n8n-workflow';
+import * as product from './product/Product.resource';
 
+/**
+ * Routes the execution to the appropriate resource and operation handler.
+ *
+ * @returns A promise resolving to the node execution data for n8n.
+ *
+ * @throws NodeOperationError
+ * Thrown if the resource operation is not supported.
+ *
+ * @throws NodeApiError
+ * Thrown if the API request fails.
+ */
 export async function router(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 	let returnData: INodeExecutionData[] = [];
 
@@ -19,10 +29,7 @@ export async function router(this: IExecuteFunctions): Promise<INodeExecutionDat
 	try {
 		switch (shopwareNodeData.resource) {
 			case 'product':
-				returnData = await product[shopwareNodeData.operation].execute.call(
-					this,
-					items,
-				);
+				returnData = await product[shopwareNodeData.operation].execute.call(this, items);
 				break;
 			default:
 				throw new NodeOperationError(
@@ -40,5 +47,5 @@ export async function router(this: IExecuteFunctions): Promise<INodeExecutionDat
 		throw error;
 	}
 
-	return [this.helpers.returnJsonArray(returnData)];
+	return [returnData];
 }
