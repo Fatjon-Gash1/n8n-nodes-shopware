@@ -34,6 +34,14 @@
             "dist/nodes/Shopware/Shopware.node.js"
         ]
     },
+    "release-it": {
+        "npm": {
+            "publish": false
+        },
+        "github": {
+            "release": true
+        }
+    },
     "devDependencies": {
         "@n8n/node-cli": "*",
         "eslint": "9.32.0",
