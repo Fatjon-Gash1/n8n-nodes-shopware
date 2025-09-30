@@ -1,17 +1,21 @@
-import {
-	type IDataObject,
-	type IExecuteFunctions,
-	type IPollFunctions,
-	type ILoadOptionsFunctions,
-	type IHttpRequestMethods,
-	type IRequestOptions,
-    NodeApiError,
+import type {
+	IDataObject,
+	IExecuteFunctions,
+	IPollFunctions,
+	ILoadOptionsFunctions,
+	IHttpRequestMethods,
+	IRequestOptions,
 } from 'n8n-workflow';
-import type { ProductField } from '../helpers/interfaces';
 
 /**
- * Make an API request to Shopware 
+ * Generic request wrapper for Shopware API.
  *
+ * @param method - HTTP method (GET, POST, etc.)
+ * @param endpoint - Shopware API endpoint, starting with `/`
+ * @param [body] - Optional request body
+ * @param [qs] - Optional query string params
+ * @returns A promise that resolves to a parsed JSON response from Shopware
+ * @throws NodeApiError when the request fails
  */
 export async function apiRequest(
 	this: IExecuteFunctions | ILoadOptionsFunctions | IPollFunctions,
@@ -19,11 +23,10 @@ export async function apiRequest(
 	endpoint: string,
 	body: IDataObject = {},
 	query?: IDataObject,
-	uri?: string,
 	option: IDataObject = {},
 ) {
-    const credentials = await this.getCredentials('shopwareOAuth2Api');
-    const url = credentials.url as string;
+	const credentials = await this.getCredentials('shopwareOAuth2Api');
+	const url = credentials.url as string;
 
 	query = query || {};
 
@@ -32,7 +35,7 @@ export async function apiRequest(
 		method,
 		body,
 		qs: query,
-		uri: `${url}/api/${endpoint}`,
+		uri: `${url}/api${endpoint}`,
 		useQuerystring: false,
 		json: true,
 	};
@@ -45,55 +48,5 @@ export async function apiRequest(
 		delete options.body;
 	}
 
-	const response =  await this.helpers.requestWithAuthentication.call(this, 'shopwareOAuth2Api', options);
-	return response;
-}
-
-/**
- * Make an API request to paginated Shopware endpoint
- * and return all results
- *
- * @param {(IExecuteFunctions | IExecuteFunctions)} this
- */
-export async function apiRequestAllItems(
-	this: IExecuteFunctions | ILoadOptionsFunctions | IPollFunctions,
-	method: IHttpRequestMethods,
-	endpoint: string,
-	body?: IDataObject,
-	query?: IDataObject,
-) {
-	if (query === undefined) {
-		query = {};
-	}
-	query.pageSize = 100;
-
-	const returnData: IDataObject[] = [];
-
-	let responseData;
-
-	do {
-		responseData = await apiRequest.call(this, method, endpoint, body, query);
-		returnData.push.apply(returnData, responseData.records as IDataObject[]);
-
-		query.offset = responseData.offset;
-	} while (responseData.offset !== undefined);
-
-	return {
-		records: returnData,
-	};
-}
-
-export async function getProductFields(
-	this: IExecuteFunctions | IPollFunctions,
-): Promise<ProductField[]> {
-    try {
-    // const response = await apiRequest.call(this, 'GET', '/products/schema');
-    // return response.fields as ProductField[];
-
-    const fields: ProductField[] = ['id', 'name', 'productNumber', 'stock', 'price', 'description', 'createdAt', 'updatedAt'];
-
-    return fields;
-    } catch (error) {
-        throw new NodeApiError(this.getNode(), {error: 'Failed to fetch fields from Shopware: ' + error.message });
-    }
+	return await this.helpers.requestWithAuthentication.call(this, 'shopwareOAuth2Api', options);
 }
