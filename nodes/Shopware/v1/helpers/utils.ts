@@ -11,9 +11,23 @@ export function wrapData(data: IDataObject | IDataObject[]): INodeExecutionData[
 	}));
 }
 
+export function uuidv7(): string {
+	const hex = (n: number, width: number) => n.toString(16).padStart(width, '0');
+
+	const now = Date.now();
+	const timeHex = hex(now, 12);
+
+	const rand1 = hex(Math.floor(Math.random() * 0xffff), 4);
+	const rand2 = hex(Math.floor(Math.random() * 0xffff), 4);
+	const rand3 = hex(Math.floor(Math.random() * 0xffffff), 6);
+	const rand4 = hex(Math.floor(Math.random() * 0xffffff), 6);
+
+	return timeHex.slice(0, 8) + timeHex.slice(8, 12) + '7' + rand1.slice(1) + rand2 + rand3 + rand4;
+}
+
 /**
  * Retrieves the Shopware instance's default installation currency.
- * 
+ *
  * @returns A promise resolving to a string representing the currencyId
  */
 export async function getDefaultCurrencyId(this: IExecuteFunctions): Promise<string> {
@@ -36,7 +50,7 @@ export async function getDefaultCurrencyId(this: IExecuteFunctions): Promise<str
 
 /**
  * Retrieves the provided product's tax rate.
- * 
+ *
  * @param productId - The product UUID
  * @returns A promise resolving to a number representing the tax rate
  */
