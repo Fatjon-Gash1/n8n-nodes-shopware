@@ -2,6 +2,7 @@ import type { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
 import type { ShopwareType } from './node.type';
 import { NodeOperationError } from 'n8n-workflow';
 import * as product from './product/Product.resource';
+import * as customer from './customer/Customer.resource';
 
 /**
  * Routes the execution to the appropriate resource and operation handler.
@@ -30,6 +31,9 @@ export async function router(this: IExecuteFunctions): Promise<INodeExecutionDat
 		switch (shopwareNodeData.resource) {
 			case 'product':
 				returnData = await product[shopwareNodeData.operation].execute.call(this, items);
+				break;
+			case 'customer':
+				returnData = await customer[shopwareNodeData.operation].execute.call(this, items);
 				break;
 			default:
 				throw new NodeOperationError(

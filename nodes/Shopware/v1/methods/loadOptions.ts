@@ -1,5 +1,12 @@
 import type { ILoadOptionsFunctions, INodePropertyOptions } from 'n8n-workflow';
-import type { ProductOption, CurrencyOption, TaxOption, CategoryOption, SalesChannelOption } from '../actions/product/types';
+import type {
+	ProductOption,
+	CurrencyOption,
+	TaxOption,
+	CategoryOption,
+	SalesChannelOption,
+} from '../actions/product/types';
+import type { LanguageOption, CustomerGroupOption, CountryOption } from '../actions/customer/types';
 import {
 	productOptionFields,
 	currencyOptionFields,
@@ -7,6 +14,11 @@ import {
 	categoryOptionFields,
 	salesChannelOptionFields,
 } from '../actions/product/fields';
+import {
+	languageOptionFields,
+	customerGroupOptionFields,
+	countryOptionFields,
+} from '../actions/customer/fields';
 import { apiRequest } from '../transport';
 
 async function fetchResource<T>(
@@ -62,4 +74,42 @@ export async function getSalesChannels(
 	this: ILoadOptionsFunctions,
 ): Promise<INodePropertyOptions[]> {
 	return await fetchResource<SalesChannelOption>(this, 'sales-channel', salesChannelOptionFields);
+}
+
+export async function getLanguages(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+	return await fetchResource<LanguageOption>(this, 'language', languageOptionFields);
+}
+
+export async function getCustomerGroups(
+	this: ILoadOptionsFunctions,
+): Promise<INodePropertyOptions[]> {
+	return await fetchResource<CustomerGroupOption>(
+		this,
+		'customer-group',
+		customerGroupOptionFields,
+	);
+}
+
+export async function getPaymentMethods(
+	this: ILoadOptionsFunctions,
+): Promise<INodePropertyOptions[]> {
+	const returnData: INodePropertyOptions[] = [];
+
+	const response = await apiRequest.call(this, 'GET', `/payment-method`);
+
+	for (const item of response.data) {
+		const name = item.name as string;
+		const value = item.id as string;
+
+		returnData.push({
+			name,
+			value,
+		});
+	}
+
+	return returnData;
+}
+
+export async function getCountries(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+	return await fetchResource<CountryOption>(this, 'country', countryOptionFields);
 }

@@ -2,6 +2,7 @@
 import { NodeConnectionType, type INodeTypeDescription } from 'n8n-workflow';
 
 import * as product from './product/Product.resource';
+import * as customer from './customer/Customer.resource';
 
 export const versionDescription: INodeTypeDescription = {
 	displayName: 'Shopware',
@@ -35,9 +36,14 @@ export const versionDescription: INodeTypeDescription = {
 					name: 'Product',
 					value: 'product',
 				},
+				{
+					name: 'Customer',
+					value: 'customer',
+				},
 			],
 			default: 'product',
 		},
 		...product.description,
+		...customer.description,
 	],
 };
