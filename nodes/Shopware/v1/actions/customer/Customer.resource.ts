@@ -1,9 +1,12 @@
 import type { INodeProperties } from 'n8n-workflow';
 
+import * as create from './create.operation';
+import * as deleteCustomer from './deleteCustomer.operation';
 import * as get from './get.operation';
 import * as getMany from './getMany.operation';
+import * as update from './update.operation';
 
-export { get, getMany };
+export { create, deleteCustomer, get, getMany, update };
 
 export const description: INodeProperties[] = [
 	{
@@ -12,6 +15,18 @@ export const description: INodeProperties[] = [
 		type: 'options',
 		noDataExpression: true,
 		options: [
+			{
+				name: 'Create',
+				value: 'create',
+				description: 'Create a customer',
+				action: 'Create a customer',
+			},
+			{
+				name: 'Delete',
+				value: 'deleteCustomer',
+				description: 'Delete a customer',
+				action: 'Delete a customer',
+			},
 			{
 				name: 'Get',
 				value: 'get',
@@ -24,6 +39,12 @@ export const description: INodeProperties[] = [
 				description: 'Retrieve many customers',
 				action: 'Get many customers',
 			},
+			{
+				name: 'Update',
+				value: 'update',
+				description: 'Update a customer',
+				action: 'Update a customer',
+			},
 		],
 		default: 'getMany',
 		displayOptions: {
@@ -32,6 +53,9 @@ export const description: INodeProperties[] = [
 			},
 		},
 	},
+	...create.description,
+	...deleteCustomer.description,
 	...get.description,
 	...getMany.description,
+	...update.description,
 ];

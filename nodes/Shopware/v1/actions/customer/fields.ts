@@ -20,3 +20,9 @@ export const customerFields = [
 	'orderCount',
 	'orderTotalAmount',
 ];
+
+export const languageOptionFields = ['id', 'name'];
+
+export const customerGroupOptionFields = ['id', 'name'];
+
+export const countryOptionFields = ['id', 'name'];
