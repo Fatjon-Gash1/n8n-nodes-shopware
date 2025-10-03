@@ -53,6 +53,8 @@ async function fetchResource<T>(
 		});
 	}
 
+	returnData.push({ name: 'None', value: '' });
+
 	return returnData;
 }
 
@@ -108,6 +110,8 @@ export async function getPaymentMethods(
 			value,
 		});
 	}
+
+	returnData.push({ name: 'None', value: '' });
 
 	return returnData;
 }
