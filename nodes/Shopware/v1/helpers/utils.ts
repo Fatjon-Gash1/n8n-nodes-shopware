@@ -1,6 +1,7 @@
 import type { IDataObject, IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
 import { currencyFields } from '../actions/product/fields';
 import { apiRequest } from '../transport';
+import { salutationFields } from '../actions/fields';
 
 export function wrapData(data: IDataObject | IDataObject[]): INodeExecutionData[] {
 	if (!Array.isArray(data)) {
@@ -45,6 +46,29 @@ export async function getDefaultCurrencyId(this: IExecuteFunctions): Promise<str
 		],
 	};
 	const response = await apiRequest.call(this, 'POST', `/search/currency`, body);
+	return response.data[0].id;
+}
+
+/**
+ * Retrieves the default customer salutation.
+ *
+ * @returns A promise resolving to a string representing the salutation ID 
+ */
+export async function getDefaultSalutationId(this: IExecuteFunctions): Promise<string> {
+	const body = {
+		fields: salutationFields,
+		includes: {
+			salutation: salutationFields,
+		},
+		filter: [
+			{
+				type: 'equals',
+				field: 'salutationKey',
+				value: 'not_specified',
+			},
+		],
+	};
+	const response = await apiRequest.call(this, 'POST', `/search/salutation`, body);
 	return response.data[0].id;
 }
 

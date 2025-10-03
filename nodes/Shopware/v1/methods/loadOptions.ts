@@ -20,6 +20,8 @@ import {
 	countryOptionFields,
 } from '../actions/customer/fields';
 import { apiRequest } from '../transport';
+import { salutationOptionFields } from '../actions/fields';
+import { SalutationOption } from '../actions/types';
 
 async function fetchResource<T>(
 	context: ILoadOptionsFunctions,
@@ -112,4 +114,8 @@ export async function getPaymentMethods(
 
 export async function getCountries(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 	return await fetchResource<CountryOption>(this, 'country', countryOptionFields);
+}
+
+export async function getSalutations(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+	return await fetchResource<SalutationOption>(this, 'salutation', salutationOptionFields);
 }
