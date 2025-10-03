@@ -1,1 +1,1 @@
-export const salutationOptionFields = ['id', 'displayName', 'salutationKey'];
+export const salutationFields = ['id', 'displayName', 'salutationKey'];
