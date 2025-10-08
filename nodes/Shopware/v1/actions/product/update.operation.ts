@@ -11,6 +11,7 @@ import {
 	type JsonObject,
 	updateDisplayOptions,
 	NodeApiError,
+	NodeOperationError,
 } from 'n8n-workflow';
 import type { NodePrice, ProductUpdatePayload } from './types';
 import { getProductTaxRate, wrapData } from '../../helpers/utils';
@@ -219,6 +220,23 @@ export async function execute(
 	for (let i = 0; i < items.length; i++) {
 		try {
 			const id = this.getNodeParameter('id', i) as string;
+
+			const searchBody = {
+				fields: productFields,
+				includes: {
+					product: productFields,
+				},
+				filter: [{ type: 'equals', field: 'id', value: id }],
+			};
+
+			const product = (await apiRequest.call(this, 'POST', `/search/product`, searchBody)).data[0];
+			if (!product) {
+				throw new NodeOperationError(this.getNode(), 'Product does not exist', {
+					description: 'There is no product with id ' + id,
+					itemIndex: i,
+				});
+			}
+
 			const updateFields = this.getNodeParameter('updateFields', i);
 
 			const updateBody: ProductUpdatePayload = {
@@ -260,14 +278,6 @@ export async function execute(
 					visibility: 30,
 				})),
 				active: updateFields.active as boolean,
-			};
-
-			const searchBody = {
-				fields: productFields,
-				includes: {
-					product: productFields,
-				},
-				filter: [{ type: 'equals', field: 'id', value: id }],
 			};
 
 			for (const key in updateBody) {
