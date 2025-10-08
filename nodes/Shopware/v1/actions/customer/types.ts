@@ -22,6 +22,7 @@ export interface CustomerCreatePayload extends IDataObject {
 		lastName: string;
 		city: string;
 		street: string;
+		salutationId: string;
 	}>;
 	defaultBillingAddressId?: string | null;
 	defaultShippingAddressId?: string | null;

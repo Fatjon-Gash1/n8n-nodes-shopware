@@ -269,6 +269,7 @@ export async function execute(
 						lastName: address.lastName,
 						city: address.city,
 						street: address.street,
+						salutationId: customer.salutationId
 					};
 				});
 			}
