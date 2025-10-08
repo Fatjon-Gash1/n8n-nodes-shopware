@@ -26,7 +26,7 @@ export const currencyFields = ['id', 'name', 'factor', 'isoCode'];
 
 export const productOptionFields = ['id', 'name'];
 
-export const currencyOptionFields = ['id', 'isoCode'];
+export const currencyOptionFields = ['id', 'isoCode', 'factor', 'itemRounding', 'totalRounding'];
 
 export const taxOptionFields = ['id', 'name', 'taxRate'];
 

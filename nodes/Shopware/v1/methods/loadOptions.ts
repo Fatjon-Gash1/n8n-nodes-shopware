@@ -7,6 +7,8 @@ import type {
 	SalesChannelOption,
 } from '../actions/product/types';
 import type { LanguageOption, CustomerGroupOption, CountryOption } from '../actions/customer/types';
+import type { SalutationOption } from '../actions/order/types';
+import type { GenericOption } from '../actions/types';
 import {
 	productOptionFields,
 	currencyOptionFields,
@@ -19,9 +21,9 @@ import {
 	customerGroupOptionFields,
 	countryOptionFields,
 } from '../actions/customer/fields';
+import { salutationOptionFields } from '../actions/order/fields';
+import { genericFields } from '../actions/fields';
 import { apiRequest } from '../transport';
-import { salutationFields } from '../actions/fields';
-import { SalutationOption } from '../actions/types';
 
 async function fetchResource<T>(
 	context: ILoadOptionsFunctions,
@@ -44,7 +46,14 @@ async function fetchResource<T>(
 		let value = item[fields[0] as keyof T] as string;
 
 		if (mapValue) {
-			value = fields.map((field) => item[field as keyof T]).join('-');
+			value = fields
+				.map((field) => {
+					if (typeof item[field as keyof T] === 'object') {
+						return JSON.stringify(item[field as keyof T]);
+					}
+					return item[field as keyof T];
+				})
+				.join('-');
 		}
 
 		returnData.push({
@@ -64,6 +73,12 @@ export async function getProducts(this: ILoadOptionsFunctions): Promise<INodePro
 
 export async function getCurrencies(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 	return await fetchResource<CurrencyOption>(this, 'currency', currencyOptionFields);
+}
+
+export async function getOrderCurrencies(
+	this: ILoadOptionsFunctions,
+): Promise<INodePropertyOptions[]> {
+	return await fetchResource<CurrencyOption>(this, 'currency', currencyOptionFields, true);
 }
 
 export async function getTaxRates(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
@@ -116,10 +131,66 @@ export async function getPaymentMethods(
 	return returnData;
 }
 
+async function getStatesByType(
+	this: ILoadOptionsFunctions,
+	type: string,
+): Promise<INodePropertyOptions[]> {
+	const returnData: INodePropertyOptions[] = [];
+	const body = {
+		filter: [
+			{
+				type: 'equals',
+				field: 'technicalName',
+				value: type,
+			},
+		],
+		associations: {
+			states: {},
+		},
+	};
+
+	const states = (await apiRequest.call(this, 'POST', `/search/state-machine`, body)).data[0]
+		.states;
+
+	for (const state of states) {
+		const name = state.name as string;
+		const value = state.id as string;
+
+		returnData.push({
+			name,
+			value,
+		});
+	}
+
+	return returnData;
+}
+
 export async function getCountries(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 	return await fetchResource<CountryOption>(this, 'country', countryOptionFields);
 }
 
 export async function getSalutations(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-	return await fetchResource<SalutationOption>(this, 'salutation', salutationFields);
+	return await fetchResource<SalutationOption>(this, 'salutation', salutationOptionFields);
+}
+
+export async function getOrderStates(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+	return await getStatesByType.call(this, 'order.state');
+}
+
+export async function getTransactionStates(
+	this: ILoadOptionsFunctions,
+): Promise<INodePropertyOptions[]> {
+	return await getStatesByType.call(this, 'order_transaction.state');
+}
+
+export async function getDeliveryStates(
+	this: ILoadOptionsFunctions,
+): Promise<INodePropertyOptions[]> {
+	return await getStatesByType.call(this, 'order_delivery.state');
+}
+
+export async function getShippingMethods(
+	this: ILoadOptionsFunctions,
+): Promise<INodePropertyOptions[]> {
+	return await fetchResource<GenericOption>(this, 'shipping-method', genericFields);
 }
