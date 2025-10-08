@@ -13,6 +13,7 @@ export const customerFields = [
 	'groupId',
 	'salesChannelId',
 	'languageId',
+	'salutationId',
 	'defaultBillingAddressId',
 	'defaultShippingAddressId',
 	'defaultPaymentMethodId',
