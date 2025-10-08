@@ -430,7 +430,6 @@ export async function execute(
 	for (let i = 0; i < items.length; i++) {
 		try {
 			const id = this.getNodeParameter('id', i) as string;
-			const { state: orderState, ...updateFields } = this.getNodeParameter('updateFields', i);
 
 			const searchPrevOrderBody = {
 				filter: [{ type: 'equals', field: 'id', value: id }],
@@ -438,14 +437,16 @@ export async function execute(
 					currency: {},
 				},
 			};
-            const prevOrder = (await apiRequest.call(this, 'POST', `/search/order`, searchPrevOrderBody)).data[0] as OrderResponse;
 
+            const prevOrder = (await apiRequest.call(this, 'POST', `/search/order`, searchPrevOrderBody)).data[0] as OrderResponse;
             if (!prevOrder) {
 				throw new NodeOperationError(this.getNode(), 'Order does not exist', {
 					description: 'There is no order with id ' + id,
 					itemIndex: i,
 				});
             }
+
+			const { state: orderState, ...updateFields } = this.getNodeParameter('updateFields', i);
 
 			const {
 				currency: currencyData,

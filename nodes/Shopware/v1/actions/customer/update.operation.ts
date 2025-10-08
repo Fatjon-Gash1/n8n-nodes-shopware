@@ -204,6 +204,23 @@ export async function execute(
 	for (let i = 0; i < items.length; i++) {
 		try {
 			const id = this.getNodeParameter('id', i) as string;
+
+			const searchBody = {
+				fields: customerFields,
+				includes: {
+					customer: customerFields,
+				},
+				filter: [{ type: 'equals', field: 'id', value: id }],
+			};
+
+			const customer = (await apiRequest.call(this, 'POST', `/search/customer`, searchBody)).data[0];
+			if (!customer) {
+				throw new NodeOperationError(this.getNode(), 'Customer does not exist', {
+					description: 'There is no customer with id ' + id,
+					itemIndex: i,
+				});
+			}
+
 			const updateFields = this.getNodeParameter('updateFields', i);
 
 			let defaultShippingAddressId: string | null = null;
@@ -268,14 +285,6 @@ export async function execute(
 				defaultShippingAddressId,
 				defaultBillingAddressId,
 				addresses,
-			};
-
-			const searchBody = {
-				fields: customerFields,
-				includes: {
-					customer: customerFields,
-				},
-				filter: [{ type: 'equals', field: 'id', value: id }],
 			};
 
 			for (const key in updateBody) {
