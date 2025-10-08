@@ -19,4 +19,4 @@ export const orderFields = [
 	'campaignCode',
 ];
 
-export const salutationFields = ['id', 'displayName'];
+export const salutationOptionFields = ['id', 'displayName'];

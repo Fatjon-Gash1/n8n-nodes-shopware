@@ -21,7 +21,7 @@ import {
 	customerGroupOptionFields,
 	countryOptionFields,
 } from '../actions/customer/fields';
-import { salutationFields } from '../actions/order/fields';
+import { salutationOptionFields } from '../actions/order/fields';
 import { genericFields } from '../actions/fields';
 import { apiRequest } from '../transport';
 
@@ -170,7 +170,7 @@ export async function getCountries(this: ILoadOptionsFunctions): Promise<INodePr
 }
 
 export async function getSalutations(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-	return await fetchResource<SalutationOption>(this, 'salutation', salutationFields);
+	return await fetchResource<SalutationOption>(this, 'salutation', salutationOptionFields);
 }
 
 export async function getOrderStates(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
