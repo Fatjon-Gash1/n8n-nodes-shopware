@@ -14,7 +14,7 @@ import {
 import type { NodeCustomerAddress, CustomerCreatePayload } from './types';
 import { apiRequest } from '../../transport';
 import { customerFields } from './fields';
-import { uuidv7, wrapData } from '../../helpers/utils';
+import { getDefaultSalutationId, uuidv7, wrapData } from '../../helpers/utils';
 
 const properties: INodeProperties[] = [
 	{
@@ -72,6 +72,16 @@ const properties: INodeProperties[] = [
 		},
 		default: '',
 		description: 'Select the language from the list',
+	},
+	{
+		displayName: 'Salutation',
+		name: 'salutation',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getSalutations',
+		},
+		default: '',
+		description: 'Select the salutation from the list',
 	},
 	{
 		displayName: 'Group',
@@ -217,6 +227,11 @@ export async function execute(
 				});
 			}
 
+			let salutationId = this.getNodeParameter('salutation', i) as string;
+
+			if (!salutationId) {
+				salutationId = await getDefaultSalutationId.call(this);
+			}
 			const addresses = nodeAddresses.map((address) => {
 				const addressId = uuidv7();
 
@@ -247,6 +262,7 @@ export async function execute(
 					lastName: address.lastName,
 					city: address.city,
 					street: address.street,
+					salutationId
 				};
 			});
 
@@ -271,6 +287,7 @@ export async function execute(
 				defaultPaymentMethodId: this.getNodeParameter('paymentMethod', i) as string,
 				languageId: this.getNodeParameter('language', i) as string,
 				salesChannelId: this.getNodeParameter('salesChannel', i) as string,
+				salutationId,
 				groupId: this.getNodeParameter('group', i) as string,
 				defaultShippingAddressId,
 				defaultBillingAddressId,

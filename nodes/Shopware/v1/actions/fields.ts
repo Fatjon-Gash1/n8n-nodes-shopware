@@ -22,3 +22,5 @@ export const orderAddressFields = [
 ];
 
 export const lineItemFields = ['id', 'name', 'states', 'price', 'taxId']
+
+export const salutationFields = ['id', 'displayName', 'salutationKey'];

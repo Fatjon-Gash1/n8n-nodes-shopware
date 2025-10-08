@@ -66,3 +66,8 @@ export type DeliveryTimeResponse = {
 	max: number;
 	unit: 'hour' | 'day' | 'week';
 };
+
+export type SalutationOption = {
+	id: string;
+	displayName: string;
+};
