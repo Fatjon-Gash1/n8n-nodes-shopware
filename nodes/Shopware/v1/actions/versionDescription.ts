@@ -1,5 +1,5 @@
 /* eslint-disable n8n-nodes-base/node-filename-against-convention */
-import { NodeConnectionType, type INodeTypeDescription } from 'n8n-workflow';
+import type { INodeTypeDescription } from 'n8n-workflow';
 
 import * as product from './product/Product.resource';
 import * as customer from './customer/Customer.resource';
@@ -17,8 +17,8 @@ export const versionDescription: INodeTypeDescription = {
 	defaults: {
 		name: 'Shopware',
 	},
-	inputs: [NodeConnectionType.Main],
-	outputs: [NodeConnectionType.Main],
+	inputs: ['main'],
+	outputs: ['main'],
 	credentials: [
 		{
 			name: 'shopwareOAuth2Api',
