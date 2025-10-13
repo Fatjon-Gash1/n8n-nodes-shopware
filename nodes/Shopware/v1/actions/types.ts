@@ -1,3 +1,5 @@
+import { GenericValue, IDataObject } from "n8n-workflow";
+
 export type GenericOption = {
 	id: string;
 	name: string;
@@ -71,3 +73,39 @@ export type SalutationOption = {
 	id: string;
 	displayName: string;
 };
+
+export type SearchFilter = {
+	type: 'equals' | 'equalsAny' | 'contains' | 'range';
+	field: string;
+	value?: GenericValue;
+	parameters?: {
+		gte?: GenericValue;
+		lte?: GenericValue;
+		gt?: GenericValue;
+		lt?: GenericValue;
+	}
+}
+
+export interface PaginationData  {
+	page: number;
+	limit: number;
+}
+
+export interface SearchBodyConstruct extends PaginationData, IDataObject {
+	fields: string[],
+	includes: {
+		[key: string]: string[]
+	}
+	associations?: {
+		[key: string]: object 
+	}
+	filter?: Array<SearchFilter>
+}
+
+export type PriceUi = {
+	price: {
+		currency: string;
+		minPrice?: string;
+		maxPrice?: string;
+	}
+}
