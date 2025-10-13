@@ -10,7 +10,7 @@ importers:
     dependencies:
       n8n-workflow:
         specifier: '*'
-        version: 1.112.0
+        version: 1.113.0
     devDependencies:
       '@n8n/node-cli':
         specifier: ^0.11.0
@@ -284,8 +284,8 @@ packages:
   '@nodeutils/defaults-deep@1.1.0':
     resolution: {integrity: sha512-gG44cwQovaOFdSR02jR9IhVRpnDP64VN6JdjYJTfNz4J4fWn7TQnmrf22nSjRqlwlxPcW8PL/L3KbJg3tdwvpg==}
 
-  '@oclif/core@4.5.4':
-    resolution: {integrity: sha512-78YYJls8+KG96tReyUsesKKIKqC0qbFSY1peUSrt0P2uGsrgAuU9axQ0iBQdhAlIwZDcTyaj+XXVQkz2kl/O0w==}
+  '@oclif/core@4.5.5':
+    resolution: {integrity: sha512-iQzlaJQgPeUXrtrX71OzDwxPikQ7c2FhNd8U8rBB7BCtj2XYfmzBT/Hmbc+g9OKDIG/JkbJT0fXaWMMBrhi+1A==}
     engines: {node: '>=18.0.0'}
 
   '@octokit/auth-token@6.0.0':
@@ -1457,8 +1457,8 @@ packages:
     resolution: {integrity: sha512-WWdIxpyjEn+FhQJQQv9aQAYlHoNVdzIzUySNV1gHUPDSdZJ3yZn7pAAbQcV7B56Mvu881q9FZV+0Vx2xC44VWA==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
-  n8n-workflow@1.112.0:
-    resolution: {integrity: sha512-O8Et2XNqXPXHXzUYtx+E0MKg9Sc+ged7bE3opz77kWtA2xoBmLQxhwZyH3+XVsHTC+1l/XLcov251G4AMG85Bw==}
+  n8n-workflow@1.113.0:
+    resolution: {integrity: sha512-WiNbm2Us/lSOTioKQZeNdLMGlbOuDMUFVuC0aMVIrQl4YarUmIAyxH7xHkpOoWrahXwbg7PrW27aPkjjAHiEgg==}
 
   napi-postinstall@0.3.4:
     resolution: {integrity: sha512-PHI5f1O0EP5xJ9gQmFGMS6IZcrVvTjpXjz7Na41gTE7eE2hK11lg04CECCYEEjdc17EV4DO+fkGEtt7TpTaTiQ==}
@@ -2193,7 +2193,7 @@ snapshots:
     dependencies:
       '@clack/prompts': 0.11.0
       '@n8n/eslint-plugin-community-nodes': 0.4.0(eslint@9.32.0(jiti@2.6.1))(typescript@5.9.2)
-      '@oclif/core': 4.5.4
+      '@oclif/core': 4.5.5
       change-case: 5.4.4
       eslint: 9.32.0(jiti@2.6.1)
       eslint-import-resolver-typescript: 4.4.4(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.46.0(eslint@9.32.0(jiti@2.6.1))(typescript@5.9.2))(eslint@9.32.0(jiti@2.6.1)))(eslint@9.32.0(jiti@2.6.1))
@@ -2248,7 +2248,7 @@ snapshots:
     dependencies:
       lodash: 4.17.21
 
-  '@oclif/core@4.5.4':
+  '@oclif/core@4.5.5':
     dependencies:
       ansi-escapes: 4.3.2
       ansis: 3.17.0
@@ -3438,7 +3438,7 @@ snapshots:
 
   mute-stream@2.0.0: {}
 
-  n8n-workflow@1.112.0:
+  n8n-workflow@1.113.0:
     dependencies:
       '@n8n/errors': 0.5.0
       '@n8n/tournament': 1.0.6
