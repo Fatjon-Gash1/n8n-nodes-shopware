@@ -85,6 +85,10 @@ export async function getTaxRates(this: ILoadOptionsFunctions): Promise<INodePro
 	return await fetchResource<TaxOption>(this, 'tax', taxOptionFields, true);
 }
 
+export async function getTaxes(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+	return await fetchResource<GenericOption>(this, 'tax', genericFields);
+}
+
 export async function getCategories(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 	return await fetchResource<CategoryOption>(this, 'category', categoryOptionFields, true);
 }
@@ -193,4 +197,8 @@ export async function getShippingMethods(
 	this: ILoadOptionsFunctions,
 ): Promise<INodePropertyOptions[]> {
 	return await fetchResource<GenericOption>(this, 'shipping-method', genericFields);
+}
+
+export async function getProductManufacturers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+	return await fetchResource<GenericOption>(this, 'product-manufacturer', genericFields);
 }

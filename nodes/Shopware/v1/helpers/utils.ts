@@ -19,10 +19,13 @@ import {
 	DeliveryTimeResponse,
 	LineItemResponse,
 	OrderCustomerResponse,
+	PaginationData,
 	ProductResponse,
+	SearchBodyConstruct,
 	ShippingMethodDataResponse,
 	ShippingMethodPrice,
 } from '../actions/types';
+import { customerFilterHandlers, orderFilterHandlers, productFilterHandlers } from './handlers';
 
 export function wrapData(data: IDataObject | IDataObject[]): INodeExecutionData[] {
 	if (!Array.isArray(data)) {
@@ -101,7 +104,7 @@ export async function getDefaultLanguageId(this: IExecuteFunctions): Promise<str
 /**
  * Retrieves the default customer salutation.
  *
- * @returns A promise resolving to a string representing the salutation ID 
+ * @returns A promise resolving to a string representing the salutation ID
  */
 export async function getDefaultSalutationId(this: IExecuteFunctions): Promise<string> {
 	const body = {
@@ -269,7 +272,7 @@ async function getTaxRate(this: IExecuteFunctions, taxId: string): Promise<numbe
 export async function getCustomerByNumber(
 	this: IExecuteFunctions,
 	customerNumber: string,
-	itemIndex: number
+	itemIndex: number,
 ): Promise<OrderCustomerResponse> {
 	const customerBody = {
 		fields: orderCustomerFields,
@@ -289,10 +292,10 @@ export async function getCustomerByNumber(
 		.data[0] as CustomerResponse;
 
 	if (!customer) {
-				throw new NodeOperationError(this.getNode(), 'No customer found', {
-					description: 'There is no customer associated with customer number ' + customerNumber,
-					itemIndex,
-				});
+		throw new NodeOperationError(this.getNode(), 'No customer found', {
+			description: 'There is no customer associated with customer number ' + customerNumber,
+			itemIndex,
+		});
 	}
 
 	const [billingAddress, shippingAddress] = await Promise.all([
@@ -357,10 +360,10 @@ export async function getLineItemData(
 		.data[0] as ProductResponse;
 
 	if (!product) {
-				throw new NodeOperationError(this.getNode(), 'No product found', {
-					description: 'There is no product associated with product number ' + productNumber,
-					itemIndex,
-				});
+		throw new NodeOperationError(this.getNode(), 'No product found', {
+			description: 'There is no product associated with product number ' + productNumber,
+			itemIndex,
+		});
 	}
 
 	const taxRate = await getTaxRate.call(this, product.taxId);
@@ -425,4 +428,77 @@ export async function getPrePaymentOrderStates(this: IExecuteFunctions): Promise
 		.map((state) => state.id);
 
 	return prePaymentStates;
+}
+
+/**
+ *
+ * @param paginationData - Body pagination fields
+ * @param baseFields - Entity result base fields
+ * @param entity - Which entity to construct a search body for (order, customer, product)
+ * @param [filters] - Entity fields to filter by
+ * @param [associations] - Other entities associated with the entity provided
+ * @returns A SearchBodyConstruct object
+ */
+export function constructSearchBody(
+	this: IExecuteFunctions,
+	paginationData: PaginationData,
+	baseFields: string[],
+	entity: 'order' | 'product' | 'customer',
+	filters?: IDataObject,
+	...associations: string[]
+): SearchBodyConstruct {
+	const stateful = ['transactions', 'deliveries'];
+	const searchBody: SearchBodyConstruct = {
+		page: paginationData.page,
+		limit: paginationData.limit,
+		fields: baseFields,
+		includes: {
+			[entity]: baseFields,
+		},
+	};
+
+	if (filters && Object.keys(filters).length !== 0) {
+		searchBody.filter = [];
+
+		switch (entity) {
+			case 'order':
+				Object.entries(filters).forEach(([key, value]) => {
+					if (orderFilterHandlers[key]) {
+						searchBody.filter!.push(orderFilterHandlers[key](value));
+					}
+				});
+				break;
+			case 'customer':
+				Object.entries(filters).forEach(([key, value]) => {
+					if (customerFilterHandlers[key]) {
+						searchBody.filter!.push(customerFilterHandlers[key](value));
+					}
+				});
+				break;
+			case 'product':
+				Object.entries(filters).forEach(([key, value]) => {
+					if (productFilterHandlers[key]) {
+						searchBody.filter!.push(productFilterHandlers[key](value));
+					}
+				});
+		}
+
+	}
+
+	if (associations && associations.length > 0) {
+		searchBody.associations = {};
+		associations.forEach((assoc) => {
+			if (stateful.includes(assoc)) {
+				searchBody.associations![assoc] = {
+					associations: {
+						stateMachineState: {},
+					},
+				};
+			} else {
+				searchBody.associations![assoc] = {};
+			}
+		});
+	}
+
+	return searchBody;
 }
