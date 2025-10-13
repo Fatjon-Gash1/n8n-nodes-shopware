@@ -21,6 +21,23 @@ const properties: INodeProperties[] = [
 		description:
 			'ID of the order to get. You can find the ID in the URL when viewing the order in Shopware Admin (e.g. https://your-domain.com/admin#/sw/order/detail/&lt;orderId&gt;).',
 	},
+	{
+		displayName: 'Filters',
+		name: 'filters',
+		type: 'collection',
+		placeholder: 'Add Filter',
+		default: {},
+		options: [
+			{
+				displayName: 'Fields',
+				name: 'fields',
+				type: 'string',
+				default: '',
+				description:
+					'Fields the order will return, formatted as a string of comma-separated values. By default all the fields are returned.',
+			},
+		]
+	}
 ];
 
 const displayOptions = {
@@ -40,11 +57,21 @@ export async function execute(
 
 	for (let i = 0; i < items.length; i++) {
 		try {
+			let fields = orderFields;
+
 			const id = this.getNodeParameter('id', i) as string;
+			const filters = this.getNodeParameter('filters', i);
+
+			const shrinkedFields = filters.fields;
+
+			if (shrinkedFields) {
+				fields = (shrinkedFields as string).split(',').map((field) => field.trim());
+			}
+
 			const body = {
-				fields: orderFields,
+				fields,
 				includes: {
-					order: orderFields,
+					order: fields,
 				},
 				filter: [{ type: 'equals', field: 'id', value: id }],
 			};
