@@ -198,7 +198,7 @@ Overall Avg. Order Value: €145.15
 
 You can download the ready-to-import n8n workflow JSON below:
 
-[**Download Shopware Sales Report Workflow**](../../workflows/sales-report.json)
+[**Download Shopware Sales Report Workflow**](../workflows/sales-report.json)
 
 *(Import this file directly into your n8n instance.)*   
 
