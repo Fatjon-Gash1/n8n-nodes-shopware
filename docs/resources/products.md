@@ -82,7 +82,6 @@ Retrieve multiple products, optionally applying filters or pagination.
 | **Active**        | Boolean | ❌       | ✅     | If true, only returns active products. |
 | **Max/Min Price** | String  | ❌       | ✅     | Filter by product prices.              |
 | **Max/Min Stock** | String  | ❌       | ✅     | Filter by product stock levels.        | 
-...
 
 **Example Output**
 
@@ -177,7 +176,6 @@ Create a new product in Shopware.
 | **Stock**          | Number  | ✅        | Available stock.                                 |
 | **Tax ID**         | String  | ✅        | ID of the tax rate configured in Shopware.       |
 | **Active**         | Boolean | ❌        | Whether the product is active. Defaults to true. |
-...
 
 **Example Input**
 

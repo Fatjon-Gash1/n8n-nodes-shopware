@@ -70,7 +70,6 @@ Retrieve multiple customers, optionally applying filters or pagination.
 | **Guest**        | Boolean | ❌       | ✅     | If true, only returns guest customers. |
 | **Account Type** | String  | ❌       | ✅     | Filter by customer account types.      |
 | **Created By**   | String  | ❌       | ✅     | Filter by customer creator (admin).    |
-...
 
 **Example Output**
 
@@ -141,7 +140,6 @@ Create a new customer in Shopware.
 | **Email**           | String  | ✅       | Customer email address.          |
 | **Payment Method**  | String  | ✅       | Customer default payment method. |
 | **Group**           | String  | ✅       | Customer group.                  |
-...
 
 **Example Input**
 

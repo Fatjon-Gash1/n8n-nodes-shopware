@@ -67,7 +67,6 @@ Retrieve multiple orders, optionally applying filters or pagination.
 | **Currency**          | Boolean | ❌       | ✅     | Filter orders by currency.                    |
 | **Max/Min Total**     | String  | ❌       | ✅     | Filter orders by max/min order total (gross). |
 | **Transaction State** | String  | ❌       | ✅     | Filter orders by transaction state.           |
-...
 
 **Example Output**
 
@@ -133,7 +132,6 @@ Create a new order in Shopware.
 | **State**           | String  | ✅       | State of the order.                          |
 | **Customer Number** | String  | ✅       | Number of the customer who places the order. |
 | **Line Items**      | Array   | ✅       | Order line items (1+).                       |
-...
 
 **Example Input**
 

@@ -117,7 +117,7 @@ If you encounter issues such as authentication errors, missing resources, or API
 
 [Setup & Authentication](setup/authentication.md)
 [Resources & Operations](resources/products.md)
-[Workflow Examples](workflows/low-stock-alert.md)
+[Workflow Examples](examples/low-stock-alert.md)
 [Troubleshooting Guide](troubleshooting.md)
 
 ---
