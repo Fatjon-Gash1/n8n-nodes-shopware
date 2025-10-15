@@ -68,10 +68,12 @@ For general n8n usage, see the [Try it out guide](https://docs.n8n.io/try-it-out
 
 ## Version history
 
-* 0.1.0-alpha — Pre-release with basic support for product, customer, and order resources.
-* 1.0.0 - Initial release with full support for product resource.
-* 1.1.0 - Minor release with full support for product and customer resource.
-* 1.2.0 - Minor release with full support for product, customer, and order resources.
-* 1.2.1 - Patch release with fixes for order creation using node created customers.
-* 1.3.0 - Minor release with ample filters for all resources.
-* 1.3.1 - Patch release with base unit testing for all resources.
+| Version         | Description                                                  |
+| --------------- | ------------------------------------------------------------ |
+| **0.1.0-alpha** | Pre-release with basic product, customer, and order support. |
+| **1.0.0**       | Initial release with full product resource support.          |
+| **1.1.0**       | Added full support for customer resource.                    |
+| **1.2.0**       | Added full support for order resource.                       |
+| **1.2.1**       | Fixed order creation using node-created customers.           |
+| **1.3.0**       | Added advanced filtering for all resources.                  |
+| **1.3.1**       | Added base unit testing for all resources.                   |
