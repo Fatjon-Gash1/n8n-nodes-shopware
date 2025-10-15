@@ -7,7 +7,7 @@ With this node, you can connect your Shopware store to other systems, streamline
 
 ---
 
-## 📦 Overview
+## Overview
 
 | Feature | Description |
 |----------|--------------|
@@ -21,7 +21,7 @@ This node exposes Shopware’s Admin API resources as n8n resources, allowing fu
 
 ---
 
-## ⚙️ Supported Resources and Operations
+## Supported Resources and Operations
 
 | Resource | Get | Get Many | Create | Update | Delete |
 |----------|-----|----------|--------|--------|--------|
@@ -33,7 +33,7 @@ See detailed parameter documentation under [Resources](resources/products.md).
 
 ---
 
-## 🔐 Authentication
+## Authentication
 
 The node connects to your Shopware store through an **Integration** created in your Shopware 6 Admin panel.  
 
@@ -46,7 +46,7 @@ For setup steps and screenshots, refer to the [Authentication Guide](setup/authe
 
 ---
 
-## 🚀 Installation
+## Installation
 
 Follow the official [n8n Community Nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) to add this node to your n8n instance:
 
@@ -64,7 +64,7 @@ pnpm add @solution25/n8n-nodes-shopware
 
 Once installed, enable Community Nodes in your n8n settings and search for “Shopware” in the Nodes panel.
 
-## 💡 Usage Examples
+## Usage Examples
 
 Here are a few automation ideas using this node:
 
@@ -80,7 +80,7 @@ Here are a few automation ideas using this node:
 
 Detailed, ready-to-import examples are available under [Examples](examples/low-stock-alert.md).
 
-## 🧠 Compatibility
+## Compatibility
 
 | Component | Version |
 |-----------|---------|
@@ -90,7 +90,7 @@ Detailed, ready-to-import examples are available under [Examples](examples/low-s
 
 For best compatibility, keep your n8n instance up to date.
 
-## 🧰 Troubleshooting
+## Troubleshooting
 
 If you encounter issues such as authentication errors, missing resources, or API rate limits, see the [Troubleshooting Guide](troubleshooting.md).
 
@@ -101,7 +101,7 @@ If you encounter issues such as authentication errors, missing resources, or API
 * [Shopware documentation](https://docs.shopware.com)
 * [Shopware official site](https://www.shopware.com)
 
-## 🕓 Version History
+## Version History
 
 | Version         | Description                                                  |
 | --------------- | ------------------------------------------------------------ |
@@ -113,7 +113,7 @@ If you encounter issues such as authentication errors, missing resources, or API
 | **1.3.0**       | Added advanced filtering for all resources.                  |
 | **1.3.1**       | Added base unit testing for all resources.                   |
 
-## 📘 Documentation Index
+## Documentation Index
 
 [Setup & Authentication](setup/authentication.md)
 [Resources & Operations](resources/product.md)
