@@ -4,6 +4,7 @@ import { NodeOperationError } from 'n8n-workflow';
 import * as product from './product/Product.resource';
 import * as customer from './customer/Customer.resource';
 import * as order from './order/Order.resource';
+import * as category from './category/Category.resource';
 
 /**
  * Routes the execution to the appropriate resource and operation handler.
@@ -39,10 +40,13 @@ export async function router(this: IExecuteFunctions): Promise<INodeExecutionDat
 			case 'order':
 				returnData = await order[shopwareNodeData.operation].execute.call(this, items);
 				break;
+			case 'category':
+				returnData = await category[shopwareNodeData.operation].execute.call(this, items);
+				break;
 			default:
 				throw new NodeOperationError(
 					this.getNode(),
-					`The operation "${operation}" is not supported!`,
+					`The resource is not supported!`,
 				);
 		}
 	} catch (error) {

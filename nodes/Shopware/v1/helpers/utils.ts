@@ -25,7 +25,7 @@ import {
 	ShippingMethodDataResponse,
 	ShippingMethodPrice,
 } from '../actions/types';
-import { customerFilterHandlers, orderFilterHandlers, productFilterHandlers } from './handlers';
+import { categoryFilterHandlers, customerFilterHandlers, orderFilterHandlers, productFilterHandlers } from './handlers';
 
 export function wrapData(data: IDataObject | IDataObject[]): INodeExecutionData[] {
 	if (!Array.isArray(data)) {
@@ -443,7 +443,7 @@ export function constructSearchBody(
 	this: IExecuteFunctions,
 	paginationData: PaginationData,
 	baseFields: string[],
-	entity: 'order' | 'product' | 'customer',
+	entity: 'order' | 'product' | 'customer' | 'category',
 	filters?: IDataObject,
 	...associations: string[]
 ): SearchBodyConstruct {
@@ -479,6 +479,13 @@ export function constructSearchBody(
 				Object.entries(filters).forEach(([key, value]) => {
 					if (productFilterHandlers[key]) {
 						searchBody.filter!.push(productFilterHandlers[key](value));
+					}
+				});
+				break;
+			case 'category':
+				Object.entries(filters).forEach(([key, value]) => {
+					if (categoryFilterHandlers[key]) {
+						searchBody.filter!.push(categoryFilterHandlers[key](value));
 					}
 				});
 		}
