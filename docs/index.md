@@ -112,6 +112,7 @@ If you encounter issues such as authentication errors, missing resources, or API
 | **1.2.1**       | Fixed order creation using node-created customers.           |
 | **1.3.0**       | Added advanced filtering for all resources.                  |
 | **1.3.1**       | Added base unit testing for all resources.                   |
+| **1.4.0**       | Added full support for categories resource.                  |
 
 ## Documentation Index
 
