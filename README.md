@@ -22,41 +22,11 @@ Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes
 
 This node currently supports the following resources and operations:
 
-Products
-
-* Get All
-
-* Get by ID
-
-* Create
-
-* Update
-
-* Delete
-
-Orders
-
-* Get All
-
-* Get by ID
-
-* Create
-
-* Update
-
-* Delete
-
-Customers
-
-* Get All
-
-* Get by ID
-
-* Create
-
-* Update
-
-* Delete
+| Resource | Get | Get Many | Create | Update | Delete |
+|----------|-----|----------|--------|--------|--------|
+| Product  |  ✓  |     ✓    |    ✓   |    ✓   |    ✓   |
+| Customer |  ✓  |     ✓    |    ✓   |    ✓   |    ✓   |
+| Order    |  ✓  |     ✓    |    ✓   |    ✓   |    ✓   |
 
 ## Credentials
 
@@ -98,4 +68,10 @@ For general n8n usage, see the [Try it out guide](https://docs.n8n.io/try-it-out
 
 ## Version history
 
-* 0.1.0 — Initial release with support for Products, Orders, and Customers.
+* 0.1.0-alpha — Pre-release with basic support for product, customer, and order resources.
+* 1.0.0 - Initial release with full support for product resource.
+* 1.1.0 - Minor release with full support for product and customer resource.
+* 1.2.0 - Minor release with full support for product, customer, and order resources.
+* 1.2.1 - Patch release with fixes for order creation using node created customers.
+* 1.3.0 - Minor release with ample filters for all resources.
+* 1.3.1 - Patch release with base unit testing for all resources.
