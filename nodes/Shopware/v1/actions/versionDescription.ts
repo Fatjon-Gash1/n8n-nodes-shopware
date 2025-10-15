@@ -4,6 +4,7 @@ import type { INodeTypeDescription } from 'n8n-workflow';
 import * as product from './product/Product.resource';
 import * as customer from './customer/Customer.resource';
 import * as order from './order/Order.resource';
+import * as category from './category/Category.resource';
 
 export const versionDescription: INodeTypeDescription = {
 	displayName: 'Shopware',
@@ -45,11 +46,16 @@ export const versionDescription: INodeTypeDescription = {
 					name: 'Order',
 					value: 'order',
 				},
+				{
+					name: 'Category',
+					value: 'category',
+				},
 			],
 			default: 'product',
 		},
 		...product.description,
 		...customer.description,
 		...order.description,
+		...category.description,
 	],
 };
