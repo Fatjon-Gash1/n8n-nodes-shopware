@@ -61,12 +61,12 @@ Retrieve multiple orders, optionally applying filters or pagination.
 
 **Parameters & Filters**
 
-| Field           | Type    | Required | Filter | Description                            |
-| --------------- | ------- | -------- | ------ | -------------------------------------- |
-| **Limit**       | Number  | ❌        | ❌        | Maximum number of orders to return.  |
-| **Currency** | Boolean | ❌        | ✅        | Filter orders by currency. |
-| **Max/Min Total** | String  | ❌        | ✅        | Filter orders by max/min order total (gross).            |
-| **Transaction State** | String  | ❌        | ✅        | Filter orders by transaction state.      |
+| Field                 | Type    | Required | Filter | Description                                   |
+| --------------------- | ------- | -------- | ------ | --------------------------------------------- |
+| **Limit**             | Number  | ❌       | ❌     | Maximum number of orders to return.           |
+| **Currency**          | Boolean | ❌       | ✅     | Filter orders by currency.                    |
+| **Max/Min Total**     | String  | ❌       | ✅     | Filter orders by max/min order total (gross). |
+| **Transaction State** | String  | ❌       | ✅     | Filter orders by transaction state.           |
 ...
 
 **Example Output**
@@ -124,15 +124,15 @@ Create a new order in Shopware.
 
 **Parameters**
 
-| Field              | Type    | Required | Description                                      |
-| ------------------ | ------- | -------- | ------------------------------------------------ |
-| **Name**           | String  | ✅        | Order name.                                    |
-| **Order Number** | String  | ✅        | Order identifier.                           |
-| **Date and Time**  | Date  | ✅        | Date and time of order creation.                     |
-| **Currency**          | String  | ✅        | Order currency.                                 |
-| **State**         | String  | ✅        | State of the order.       |
-| **Customer Number**         | String | ✅        | Number of the customer who places the order. |
-| **Line Items**         | String | ✅        | Order line items (1+). |
+| Field               | Type    | Required | Description                                  |
+| ------------------  | ------- | -------- | -------------------------------------------- |
+| **Name**            | String  | ✅       | Order name.                                  |
+| **Order Number**    | String  | ✅       | Order identifier.                            |
+| **Date and Time**   | Date    | ✅       | Date and time of order creation.             |
+| **Currency**        | String  | ✅       | Order currency.                              |
+| **State**           | String  | ✅       | State of the order.                          |
+| **Customer Number** | String  | ✅       | Number of the customer who places the order. |
+| **Line Items**      | Array   | ✅       | Order line items (1+).                       |
 ...
 
 **Example Input**

@@ -19,10 +19,7 @@ It focuses on issues related to **credentials, resources, operations, API behavi
 
 **Fix:**
 1. Verify that your Shopware node exists in the correct directory:
-`~/.n8n/custom/
-        └── nodes/
-            └── Shopware/
-                └── Shopware.node.js`
+`~/.n8n/custom/nodes/Shopware/Shopware.node.js`
 2. Run:
 ```bash
 n8n stop
@@ -168,7 +165,7 @@ Re-run the workflow to view HTTP requests/responses in logs.
 
 - Ensure correct field names match Shopware’s property schema.
 
-- Use expressions only where supported (e.g., `={{$json["id"]}}`).
+- Use expressions only where supported (e.g., **={{$json["id"]}}**).
 
 ---
 
@@ -179,9 +176,10 @@ Re-run the workflow to view HTTP requests/responses in logs.
 ---
 
 ## 6. Best Practices
+
 | Recommendation            | Description                                                            |
 | ------------------------- | ---------------------------------------------------------------------- |
-| **Use Pagination (Limit)**        | Avoid fetching large result sets in a single request.                  |
+| **Use Pagination (Limit)**| Avoid fetching large result sets in a single request.                  |
 | **Handle Rate Limits**    | Shopware throttles API usage; add delays for high-frequency workflows. |
 | **Cache Static Data**     | Store non-changing entities locally to reduce load.                    |
 | **Version Pinning**       | Lock your node’s `typeVersion` to prevent breaking updates.            |

@@ -116,8 +116,8 @@ If you encounter issues such as authentication errors, missing resources, or API
 ## 📘 Documentation Index
 
 [Setup & Authentication](setup/authentication.md)
-[Resources & Operations](resources/product.md)
-[Workflow Examples](workflows/low-stock-alerts.md)
+[Resources & Operations](resources/products.md)
+[Workflow Examples](workflows/low-stock-alert.md)
 [Troubleshooting Guide](troubleshooting.md)
 
 ---

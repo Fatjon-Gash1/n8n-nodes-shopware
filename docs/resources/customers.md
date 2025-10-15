@@ -64,12 +64,12 @@ Retrieve multiple customers, optionally applying filters or pagination.
 
 **Parameters & Filters**
 
-| Field           | Type    | Required | Filter | Description                            |
-| --------------- | ------- | -------- | ------ | -------------------------------------- |
-| **Limit**       | Number  | ❌        | ❌        | Maximum number of customers to return.  |
-| **Guest** | Boolean | ❌        | ✅        | If true, only returns guest customers. |
-| **Account Type** | String  | ❌        | ✅        | Filter by customer account types.            |
-| **Created By** | String  | ❌        | ✅        | Filter by customer creator (admin).      |
+| Field            | Type    | Required | Filter | Description                            |
+| ---------------- | ------- | -------- | ------ | -------------------------------------- |
+| **Limit**        | Number  | ❌       | ❌     | Maximum number of customers to return. |
+| **Guest**        | Boolean | ❌       | ✅     | If true, only returns guest customers. |
+| **Account Type** | String  | ❌       | ✅     | Filter by customer account types.      |
+| **Created By**   | String  | ❌       | ✅     | Filter by customer creator (admin).    |
 ...
 
 **Example Output**
@@ -133,14 +133,14 @@ Create a new customer in Shopware.
 
 **Parameters**
 
-| Field              | Type    | Required | Description                                      |
-| ------------------ | ------- | -------- | ------------------------------------------------ |
-| **Name**           | String  | ✅        | Customer name.                                    |
-| **Customer Number** | String  | ✅        | Customer personal number.                           |
-| **First Name**  | Number  | ✅        | Customer first name.                     |
-| **Last Name**          | Number  | ✅        | Customer last name.                                 |
-| **Email**         | String  | ✅        | Customer email address.       |
-| **Payment Method**         | Boolean | ❌        | Customer default payment method. |
+| Field               | Type    | Required | Description                      |
+| ------------------- | ------- | -------- | -------------------------------- |
+| **Customer Number** | String  | ✅       | Customer personal number.        |
+| **First Name**      | String  | ✅       | Customer first name.             |
+| **Last Name**       | String  | ✅       | Customer last name.              |
+| **Email**           | String  | ✅       | Customer email address.          |
+| **Payment Method**  | String  | ✅       | Customer default payment method. |
+| **Group**           | String  | ✅       | Customer group.                  |
 ...
 
 **Example Input**

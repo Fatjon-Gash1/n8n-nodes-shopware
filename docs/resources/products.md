@@ -76,12 +76,12 @@ Retrieve multiple products, optionally applying filters or pagination.
 
 **Parameters & Filters**
 
-| Field           | Type    | Required | Filter | Description                            |
-| --------------- | ------- | -------- | ------ | -------------------------------------- |
-| **Limit**       | Number  | ❌        | ❌        | Maximum number of products to return.  |
-| **Active** | Boolean | ❌        | ✅        | If true, only returns active products. |
-| **Max/Min Price** | String  | ❌        | ✅        | Filter by product prices.            |
-| **Max/Min Stock** | String  | ❌        | ✅        | Filter by product stock levels.      |
+| Field             | Type    | Required | Filter | Description                            |
+| ----------------- | ------- | -------- | ------ | -------------------------------------- |
+| **Limit**         | Number  | ❌       | ❌     | Maximum number of products to return.  |
+| **Active**        | Boolean | ❌       | ✅     | If true, only returns active products. |
+| **Max/Min Price** | String  | ❌       | ✅     | Filter by product prices.              |
+| **Max/Min Stock** | String  | ❌       | ✅     | Filter by product stock levels.        | 
 ...
 
 **Example Output**
@@ -169,8 +169,8 @@ Create a new product in Shopware.
 
 **Parameters**
 
-| Field              | Type    | Required | Description                                      |
-| ------------------ | ------- | -------- | ------------------------------------------------ |
+| Field              | Type    | Required  | Description                                      |
+| ------------------ | ------- | --------- | ------------------------------------------------ |
 | **Name**           | String  | ✅        | Product name.                                    |
 | **Product Number** | String  | ✅        | Unique SKU identifier.                           |
 | **Price (Gross)**  | Number  | ✅        | Product price (gross value).                     |
