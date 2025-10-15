@@ -234,3 +234,30 @@ export const productFilterHandlers: { [key: string]: (value: GenericValue | Pric
 	purchaseSteps: (value) => ({ type: 'equals', field: 'purchaseSteps', value }),
 	tax: (value) => ({ type: 'equals', field: 'taxId', value }),
 };
+
+export const categoryFilterHandlers: { [key: string]: (value: GenericValue | PriceUi) => SearchFilter } = {
+	active: (value) => ({
+		type: 'equals',
+		field: 'active',
+		value,
+	}),
+	createdAtMax: (value) => ({
+		type: 'range',
+		field: 'createdAt',
+		parameters: { lte: value },
+	}),
+	createdAtMin: (value) => ({
+		type: 'range',
+		field: 'createdAt',
+		parameters: { gte: value },
+	}),
+	ids: (value) => ({
+		type: 'equalsAny',
+		field: 'id',
+		value: (value as string).split(',').map((id) => id.trim()),
+	}),
+	childCountMax: (value) => ({ type: 'range', field: 'childCount', parameters: { lte: value } }),
+	childCountMin: (value) => ({ type: 'range', field: 'childCount', parameters: { gte: value } }),
+	name: (value) => ({ type: 'equals', field: 'name', value }),
+	parentId: (value) => ({ type: 'equals', field: 'parentId', value }),
+};
