@@ -78,7 +78,7 @@ Here are a few automation ideas using this node:
 
 - Order notifications → Send real-time updates to Slack, email, or your CRM when a new order is created.
 
-Detailed, ready-to-import examples are available under [Examples](examples/low-stock-alerts.md).
+Detailed, ready-to-import examples are available under [Examples](examples/low-stock-alert.md).
 
 ## 🧠 Compatibility
 

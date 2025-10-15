@@ -10,9 +10,9 @@ You can create, retrieve, update, and delete product records using the Shopware 
 | Operation | Description |
 |------------|-------------|
 | **Get** | Retrieve a single product by its ID. |
-| **Get Many** | Retrieve multiple products, optionally filtered by category, stock, or custom fields. |
+| **Get Many** | Retrieve multiple products, optionally filtered by category, stock, manufacturer etc. |
 | **Create** | Add a new product to your Shopware store. |
-| **Update** | Modify product details such as name, price, or stock. |
+| **Update** | Modify product details such as name, price, stock etc. |
 | **Delete** | Remove a product from your store by ID. |
 
 ---
