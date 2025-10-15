@@ -46,7 +46,7 @@ This workflow uses three tables inside the same base:
 
 You can download the ready-to-import n8n workflow JSON below:
 
-[**Download Shopware Low-Stock Alert Workflow**](../workflows/low-stock-alert.json)
+[**Download Shopware Low-Stock Alert Workflow**](../../workflows/low-stock-alert.json)
 
 *(Import this file directly into your n8n instance.)*
 
