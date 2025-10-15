@@ -1,0 +1,515 @@
+{
+  "name": "Shopware Monthly Sales Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -688,
+        560
+      ],
+      "id": "b4598156-de3a-469e-a5fe-21af87d55380",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "content": "## Process\n* Trigger: Cron node (monthly at midnight)\n\nFlow:\n\n    Shopware Node → Get orders from the last month.\n\n    Function Node → Aggregate total revenue, order count, average order value.\n\n    Email Node / Slack Node → Send summary to sales team.\n\nExample Output:\n\n    Date: 2025-08-11\n\n    Orders: 87\n\n    Total Sales: €12,340\n\n    Avg. Order Value: €141.84",
+        "height": 512,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        -128
+      ],
+      "id": "e3931a91-2fe3-40b8-bab9-362283e0b26b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appe1ZsZ0wJPZoHYT",
+          "mode": "list",
+          "cachedResultName": "Shopware Base",
+          "cachedResultUrl": "https://airtable.com/appe1ZsZ0wJPZoHYT"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbljFDNk8vIUPzQcH",
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://airtable.com/appe1ZsZ0wJPZoHYT/tbljFDNk8vIUPzQcH"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -144,
+        544
+      ],
+      "id": "46ff99cc-eecc-4ff5-8766-f90b34819162",
+      "name": "Get Project URLs",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "1p3e84YwIQemfuEb",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        96,
+        544
+      ],
+      "id": "c543a5a5-7dda-4b8a-b1cd-3e9560b69050",
+      "name": "Loop Over Project URLs"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json['Project Name']}}",
+                    "rightValue": "abc",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "e89b3231-b095-4e61-a68e-373a5ed17a12"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d5f686ea-f6d8-4a66-a747-4dc29d86b8f2",
+                    "leftValue": "={{$json['Project Name']}}",
+                    "rightValue": "def",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        768,
+        624
+      ],
+      "id": "597baf97-c857-402b-8cfb-39a279b7cdfa",
+      "name": "Switch Shopware Project Credentials2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const date = new Date();\n\ndate.setMonth(date.getMonth() - 1);\n\nreturn [{date}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -384,
+        560
+      ],
+      "id": "7b88c042-1aee-480d-8ad1-a77d6662e1f3",
+      "name": "Set Last Month Date"
+    },
+    {
+      "parameters": {
+        "jsCode": "const totalRevenue = $input.all().reduce(\n  (accumulator, object) => accumulator + object.json.amountTotal,\n  0,\n);\n\nconst averageOrderValue = totalRevenue / $input.all().length;\n\nreturn [{\n         Project: $node['Loop Over Project URLs'].json['Project Name'],\n         Date: new Date().toISOString().split('T')[0],\n         Orders: $input.all().length,\n         ['Total Sales']:  totalRevenue,\n         ['Avg. Order Value']: averageOrderValue\n}]\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1424,
+        624
+      ],
+      "id": "c2f4a2ad-605a-4b4f-a3d3-cf70b9cbf1f7",
+      "name": "Calculate Sales Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "const totalRevenue = $input.all().reduce(\n  (accumulator, object) => accumulator + object.json.amountTotal,\n  0,\n);\n\nconst averageOrderValue = totalRevenue / $input.all().length;\n\nreturn [{\n         Project: $node['Loop Over Project URLs'].json['Project Name'],\n         Date: new Date().toISOString().split('T')[0],\n         Orders: $input.all().length,\n         ['Total Sales']:  totalRevenue,\n         ['Avg. Order Value']: averageOrderValue\n}]\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1424,
+        864
+      ],
+      "id": "f25e0cbf-fd62-4e3f-a715-1437ccf7df4d",
+      "name": "Calculate Sales Data1"
+    },
+    {
+      "parameters": {
+        "fromEmail": "fatjon.gashi.891@gmail.com",
+        "toEmail": "fatjon.gashi.891@gmail.com",
+        "subject": "Monthly Sales Report for Shopware Projects",
+        "html": "=<!-- Monthly Sales Report — Shopware Projects -->\n<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n<title>Monthly Sales Report</title>\n<style>\n  /* Basic reset */\n  body,table,td,a{ -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }\n  table,td{ mso-table-lspace:0pt; mso-table-rspace:0pt; }\n  img{ -ms-interpolation-mode:bicubic; }\n  body{ margin:0; padding:0; width:100% !important; font-family: \"Helvetica Neue\", Arial, sans-serif; background-color:#f4f6f8; color:#23303e; }\n  /* Container */\n  .email-wrapper{ width:100%; padding:20px 0; }\n  .email-content{ max-width:700px; margin:0 auto; background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 6px 18px rgba(19,35,47,0.06); }\n  .preheader{ display:none!important; visibility:hidden; opacity:0; color:transparent; height:0; width:0; }\n  /* Header */\n  .email-header{ padding:20px 28px; background:linear-gradient(90deg,#0f62fe 0%, #0063f7 100%); color:#fff; }\n  .brand{ display:flex; align-items:center; gap:12px; }\n  .brand-logo{ height:40px; width:40px; background:#fff; border-radius:6px; display:inline-block; text-align:center; line-height:40px; font-weight:700; color:#0f62fe; margin-right: 0.5em;}\n  .brand-title{ font-size:18px; font-weight:600; margin:0; }\n  .report-meta{ margin-top:8px; color:rgba(255,255,255,0.92); font-size:13px; }\n  /* Body */\n  .email-body{ padding:24px 28px 32px 28px; }\n  h1{ font-size:20px; margin:0 0 8px 0; color:#0f2a43; }\n  p.lead{ margin:0 0 18px 0; color:#425066; font-size:14px; line-height:1.45; }\n  /* Table */\n  .table-wrap{ width:100%; overflow:auto; margin-bottom:18px; }\n  table.report{ width:100%; border-collapse:collapse; font-size:14px; }\n  table.report thead th{ text-align:left; padding:12px 12px; font-weight:600; background:#f7f9fb; color:#23303e; border-bottom:1px solid #e6eef6; }\n  table.report tbody td{ padding:12px; border-bottom:1px solid #eef5fb; color:#2b3a46; vertical-align:middle; }\n  table.report tbody tr:nth-child(even) td{ background:#ffffff; }\n  .muted{ color:#6b7886; font-size:13px; }\n  .numeric{ text-align:right; font-variant-numeric: tabular-nums; }\n  .summary{ padding:14px; border-radius:8px; background:linear-gradient(180deg,#f8fbff,#ffffff); border:1px solid #e6eef6; }\n  .cta{ display:inline-block; margin-top:16px; text-decoration:none; padding:10px 16px; border-radius:6px; border:1px solid #0f62fe; color:#fff; background:#0f62fe; font-weight:600; font-size:14px; }\n  /* Footer */\n  .email-footer{ padding:18px 28px; font-size:13px; color:#7b8792; background:#fbfdff; border-top:1px solid #eef5fb; }\n  /* Responsive */\n  @media screen and (max-width:520px){\n    .email-content{ margin:0 12px; }\n    .brand-title{ font-size:16px; }\n    table.report thead th, table.report tbody td{ padding:10px 8px; font-size:13px; }\n    .email-header{ padding:16px; }\n    .email-body{ padding:18px; }\n  }\n</style>\n</head>\n<body>\n  <!-- Optional preheader (hidden preview text shown in inboxes) -->\n  <div class=\"preheader\">Monthly Sales Report — Shopware Projects (snapshot as of {{ $node['Calculate All Projects Sales Data'].json.Date }})</div>\n\n  <div class=\"email-wrapper\" role=\"article\" aria-roledescription=\"email\">\n    <div class=\"email-content\" role=\"presentation\">\n\n      <!-- Header -->\n      <div class=\"email-header\" role=\"banner\">\n        <div class=\"brand\" aria-hidden=\"true\">\n          <div class=\"brand-logo\">SW</div>\n          <div>\n            <div class=\"brand-title\">Shopware Projects — Monthly Sales Report</div>\n            <div class=\"report-meta\">Snapshot date: <strong>{{$node['Calculate All Projects Sales Data'].json.Date}}</strong></div>\n          </div>\n        </div>\n      </div>\n\n      <!-- Body -->\n      <div class=\"email-body\">\n        <h1>Monthly Sales Summary</h1>\n        <p class=\"lead\">Dear team, below is the monthly sales report for tracked Shopware projects. This summary shows orders, totals and average order values for each project as of <strong>{{$node['Calculate All Projects Sales Data'].json.Date}}</strong>.</p>\n\n        <div class=\"table-wrap\" role=\"table\" aria-label=\"Project sales table\">\n          <table class=\"report\" role=\"presentation\">\n            <thead>\n              <tr>\n                <th>Project</th>\n                <th>Date</th>\n                <th class=\"numeric\">Orders</th>\n                <th class=\"numeric\">Total Sales</th>\n                <th class=\"numeric\">Avg. Order Value</th>\n              </tr>\n            </thead>\n            <tbody>\n             {{ $json.tableRows }}\n            </tbody>\n          </table>\n        </div>\n\n        <!-- Summary -->\n        <div class=\"summary\" role=\"note\" aria-label=\"summary\">\n\n        <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"border-collapse:collapse; font-size:14px; color:#23303e;\">\n  <tr>\n    <td width=\"33.33%\" valign=\"top\" style=\"padding:8px; border-right:1px solid #e6eef6;\">\n      <div style=\"color:#6b7886; font-size:13px;\">Total Orders</div>\n      <div style=\"font-weight:700; font-size:16px;\">{{$node['Calculate All Projects Sales Data'].json['Total Orders']}}</div>\n    </td>\n    <td width=\"33.33%\" valign=\"top\" style=\"padding:8px; border-right:1px solid #e6eef6;\">\n      <div style=\"color:#6b7886; font-size:13px;\">Total Sales</div>\n      <div style=\"font-weight:700; font-size:16px;\">{{$node['Calculate All Projects Sales Data'].json['Total Sales']}}</div>\n    </td>\n    <td width=\"33.33%\" valign=\"top\" style=\"padding:8px;\">\n      <div style=\"color:#6b7886; font-size:13px;\">Overall Avg. Order Value</div>\n      <div style=\"font-weight:700; font-size:16px;\">{{$node['Calculate All Projects Sales Data'].json['Overall Avg. Order Value']}}</div>\n    </td>\n  </tr>\n</table> \n\n        </div>\n\n      </div>\n\n      <!-- Footer -->\n      <div class=\"email-footer\" role=\"contentinfo\">\n        <div>Report generated automatically — Shopware Projects</div>\n        <div style=\"margin-top:8px;\">Please do not reply to this email.</div>\n      </div>\n\n    </div>\n  </div>\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1632,
+        304
+      ],
+      "id": "5b5dc1ac-3567-428a-a31b-6e1853fac5b2",
+      "name": "Send Summary Email",
+      "webhookId": "67085c2d-d9b0-45fb-804d-430b1d4c3e94",
+      "credentials": {
+        "smtp": {
+          "id": "CMsXHpn4e8POteef",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09AZ5FV74G",
+          "mode": "list",
+          "cachedResultName": "all-test-workspace"
+        },
+        "messageType": "block",
+        "blocksUi": "={\n\t\"blocks\": [\n\t\t{\n\t\t\t\"type\": \"header\",\n\t\t\t\"text\": {\n\t\t\t\t\"type\": \"plain_text\",\n\t\t\t\t\"text\": \"📊 Monthly Sales Report – {{new Date().toLocaleDateString()}}\",\n\t\t\t\t\"emoji\": true\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"type\": \"section\",\n\t\t\t\"fields\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Total Orders:*\\n{{$node['Calculate All Projects Sales Data'].json['Total Orders']}}\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Total Sales:*\\n{{$node['Calculate All Projects Sales Data'].json['Total Sales']}}\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Overall Avg. Order Value:*\\n{{$node['Calculate All Projects Sales Data'].json['Overall Avg. Order Value']}}\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"type\": \"divider\"\n\t\t},\n\t\t{\n\t\t\t\"type\": \"header\",\n\t\t\t\"text\": {\n\t\t\t\t\"type\": \"plain_text\",\n\t\t\t\t\"text\": \"📁 Individual Project Breakdown\",\n\t\t\t\t\"emoji\": true\n\t\t\t}\n\t\t},\n{{JSON.stringify(...$json.sections)}}\n\t]\n}",
+        "text": "Monthly Sales Report",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1488,
+        464
+      ],
+      "id": "9ab0217d-b2cd-4b94-a7d3-74a4b5baec5a",
+      "name": "Send Summary Message",
+      "webhookId": "b6ee1faa-a460-4dcc-a240-f25570bfd6c2",
+      "credentials": {
+        "slackApi": {
+          "id": "uc2r0sQxCCfHHRUd",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{projectsData: $input.all().map(o => o.json)}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        384
+      ],
+      "id": "4a75f530-6ce7-409b-a86e-e84567be25c5",
+      "name": "Prepare Projects Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "const formatter = new Intl.NumberFormat('de-DE', {\n  style: 'currency',\n  currency: 'EUR'\n});\n\nconst tableRows = $node['Prepare Projects Data'].json.projectsData.map(p => (\n              `<tr>\n                <td><strong>${p.Project}</strong></td>\n                <td class=\"muted\">${p.Date}</td>\n                <td class=\"numeric\">${p.Orders}</td>\n                <td class=\"numeric\">${formatter.format(p['Total Sales'])}</td>\n                <td class=\"numeric\">${formatter.format(p['Avg. Order Value'])}</td>\n              </tr>`\n                ))\n\nreturn [{tableRows: tableRows.join('')}]\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        304
+      ],
+      "id": "877d62ca-132c-48ed-892c-761bef71bd8c",
+      "name": "Prepare HTML Table Rows"
+    },
+    {
+      "parameters": {
+        "resource": "order",
+        "filters": {
+          "createdAtMin": "={{$node['Set Last Month Date'].json.date}}"
+        }
+      },
+      "type": "CUSTOM.shopware",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        624
+      ],
+      "id": "3a129171-723a-4fd6-a7c8-09689a1e2955",
+      "name": "Get Orders for Project 1",
+      "credentials": {
+        "shopwareOAuth2Api": {
+          "id": "6nWvh4e9JVdcHJ9k",
+          "name": "Shopware account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "order",
+        "filters": {
+          "createdAtMin": "={{$node['Set Last Month Date'].json.date}}"
+        }
+      },
+      "type": "CUSTOM.shopware",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        864
+      ],
+      "id": "940fbf22-151f-4247-a9b5-ff4a029aedc3",
+      "name": "Get Orders for Project 2",
+      "credentials": {
+        "shopwareOAuth2Api": {
+          "id": "6nWvh4e9JVdcHJ9k",
+          "name": "Shopware account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const formatter = new Intl.NumberFormat('de-DE', {\n  style: 'currency',\n  currency: 'EUR'\n});\n\nconst totalOrders = $node['Prepare Projects Data'].json.projectsData.reduce(\n  (accumulator, object) => accumulator + object.Orders,\n  0,\n);\n\nconst overallTotal = $node['Prepare Projects Data'].json.projectsData.reduce(\n  (accumulator, object) => accumulator + object['Total Sales'],\n  0,\n);\n\nconst overallAvgOrderValue = overallTotal / $node['Prepare Projects Data'].json.projectsData.length;\n\nreturn [{\n         Date: new Date().toISOString().split('T')[0],\n         ['Total Orders']: totalOrders,\n         ['Total Sales']:  formatter.format(overallTotal),\n         ['Overall Avg. Order Value']: formatter.format(overallAvgOrderValue || 0)\n}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        768,
+        416
+      ],
+      "id": "ebb61ae3-fc63-4143-967a-fa11d1fe6b06",
+      "name": "Calculate All Projects Sales Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "const formatter = new Intl.NumberFormat('de-DE', {\n  style: 'currency',\n  currency: 'EUR'\n});\n\nconst sections = $node['Prepare Projects Data'].json.projectsData.map(p => (\n            {\n\t\t\t\"type\": \"section\",\n\t\t\t\"fields\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": `*Project ${p.Project} – Orders:*\\n${p.Orders}`\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": `*Sales:*\\n${formatter.format(p['Total Sales'])}`\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": `*Avg. Order Value:*\\n${formatter.format(p['Avg. Order Value'])}`\n\t\t\t\t}\n\t\t\t]\n\t\t}\n                ))\n\nreturn [{sections}]\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        464
+      ],
+      "id": "2bda6ee8-be2e-4a5a-94a9-5d44c2a1d1fa",
+      "name": "Prepare Slack Block Message"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Last Month Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Project URLs": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Project URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Project URLs": {
+      "main": [
+        [
+          {
+            "node": "Prepare Projects Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch Shopware Project Credentials2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Shopware Project Credentials2": {
+      "main": [
+        [
+          {
+            "node": "Get Orders for Project 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Orders for Project 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Last Month Date": {
+      "main": [
+        [
+          {
+            "node": "Get Project URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Sales Data": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Project URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Sales Data1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Project URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Projects Data": {
+      "main": [
+        [
+          {
+            "node": "Calculate All Projects Sales Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare HTML Table Rows": {
+      "main": [
+        [
+          {
+            "node": "Send Summary Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Orders for Project 1": {
+      "main": [
+        [
+          {
+            "node": "Calculate Sales Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Orders for Project 2": {
+      "main": [
+        [
+          {
+            "node": "Calculate Sales Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate All Projects Sales Data": {
+      "main": [
+        [
+          {
+            "node": "Prepare HTML Table Rows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Slack Block Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Slack Block Message": {
+      "main": [
+        [
+          {
+            "node": "Send Summary Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8c6ac842-9dc6-4fb2-9bf3-ffce2c950108",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c330522cb0d0cb7130dfa0abbe1ef63e5b79f2d2ab60d013c012bb1d1de14bab"
+  },
+  "id": "eWVYTFBXKPeVueNq",
+  "tags": []
+}

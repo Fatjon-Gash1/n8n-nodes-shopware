@@ -1,0 +1,713 @@
+{
+  "name": "Shopware Low-Stock Alert",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2736,
+        32
+      ],
+      "id": "ca0db972-b13b-408f-838e-d7ece56fa559",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appe1ZsZ0wJPZoHYT",
+          "mode": "list",
+          "cachedResultName": "Shopware Base",
+          "cachedResultUrl": "https://airtable.com/appe1ZsZ0wJPZoHYT"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbljFDNk8vIUPzQcH",
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://airtable.com/appe1ZsZ0wJPZoHYT/tbljFDNk8vIUPzQcH"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -2464,
+        -48
+      ],
+      "id": "063b859b-2d33-4f4a-9ec0-45e269ab975e",
+      "name": "Get Project URLs",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "1p3e84YwIQemfuEb",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2160,
+        -48
+      ],
+      "id": "9cfdf674-ea4b-4785-a506-7915c816aa50",
+      "name": "Loop Over Project URLs"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appe1ZsZ0wJPZoHYT",
+          "mode": "list",
+          "cachedResultName": "Shopware Base",
+          "cachedResultUrl": "https://airtable.com/appe1ZsZ0wJPZoHYT"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblkeDX8GUee4Nonj",
+          "mode": "list",
+          "cachedResultName": "Project Low Stock Alerts",
+          "cachedResultUrl": "https://airtable.com/appe1ZsZ0wJPZoHYT/tblkeDX8GUee4Nonj"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Project Name": "={{ $('Loop Over Projects').item.json[\"Project Name\"] }}",
+            "Products Low In Stock": "={{ $json.totalProducts }}",
+            "Alert Threshold At Time": "={{ $('Loop Over Projects').item.json[\"Low Stock Threshold\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Project Name",
+              "displayName": "Project Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Products Low In Stock",
+              "displayName": "Products Low In Stock",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Alert Threshold At Time",
+              "displayName": "Alert Threshold At Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Alerted At",
+              "displayName": "Alerted At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Product Low Stock Alerts",
+              "displayName": "Product Low Stock Alerts",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -864,
+        -304
+      ],
+      "id": "64aa07c3-c0aa-4971-b2a8-264fe7549a29",
+      "name": "Create Low Stock Project Record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "1p3e84YwIQemfuEb",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appe1ZsZ0wJPZoHYT",
+          "mode": "list",
+          "cachedResultName": "Shopware Base",
+          "cachedResultUrl": "https://airtable.com/appe1ZsZ0wJPZoHYT"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbllPG4Wh9rbv1OVR",
+          "mode": "list",
+          "cachedResultName": "Product Low Stock Alerts",
+          "cachedResultUrl": "https://airtable.com/appe1ZsZ0wJPZoHYT/tbllPG4Wh9rbv1OVR"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Product Name": "={{ $('Loop Over Products').item.json.name }}",
+            "Stock Level At Time": "={{ $('Loop Over Products').item.json.stock }}",
+            "Reference Link": "={{ $('Loop Over Products').item.json.referenceLink }}",
+            "Project": "=[\"{{$input.all().last().json.id}}\"]"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Product Name",
+              "displayName": "Product Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Stock Level At Time",
+              "displayName": "Stock Level At Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Reference Link",
+              "displayName": "Reference Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Alerted At",
+              "displayName": "Alerted At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Project",
+              "displayName": "Project",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Project Name (from Project)",
+              "displayName": "Project Name (from Project)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -736,
+        -48
+      ],
+      "id": "431e1dd8-c2a5-46c8-9f15-fff9673ea682",
+      "name": "Create Low Stock Product Record/s",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "1p3e84YwIQemfuEb",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1568,
+        -304
+      ],
+      "id": "51c7e06b-7f75-4268-98ae-387c1057dfff",
+      "name": "Loop Over Projects"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1216,
+        -64
+      ],
+      "id": "1a301031-9ea4-4986-8960-96a394f7f773",
+      "name": "Loop Over Products"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json['Project Name']}}",
+                    "rightValue": "abc",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "e89b3231-b095-4e61-a68e-373a5ed17a12"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d5f686ea-f6d8-4a66-a747-4dc29d86b8f2",
+                    "leftValue": "={{$json['Project Name']}}",
+                    "rightValue": "def",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1920,
+        48
+      ],
+      "id": "cc9af08a-b405-4594-992c-ab25ac11b5cc",
+      "name": "Switch Shopware Project Credentials"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appe1ZsZ0wJPZoHYT",
+          "mode": "list",
+          "cachedResultName": "Shopware Base",
+          "cachedResultUrl": "https://airtable.com/appe1ZsZ0wJPZoHYT"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblkeDX8GUee4Nonj",
+          "mode": "list",
+          "cachedResultName": "Project Low Stock Alerts",
+          "cachedResultUrl": "https://airtable.com/appe1ZsZ0wJPZoHYT/tblkeDX8GUee4Nonj"
+        },
+        "filterByFormula": "={Project Name} = '{{$json.project}}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -960,
+        -48
+      ],
+      "id": "aa61cdf0-b34f-4282-af93-425967f7edaa",
+      "name": "Get Low-Stock Project Record ID",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "1p3e84YwIQemfuEb",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getMany",
+        "filters": {
+          "fields": "id, name, stock",
+          "maxStock": "={{$json['Low Stock Threshold']}}"
+        }
+      },
+      "type": "CUSTOM.shopware",
+      "typeVersion": 1,
+      "position": [
+        -1648,
+        32
+      ],
+      "id": "1fb3abbd-771b-4620-a9f3-b970462a450f",
+      "name": "Get Low Stock Products Per Project 1",
+      "credentials": {
+        "shopwareOAuth2Api": {
+          "id": "6nWvh4e9JVdcHJ9k",
+          "name": "Shopware account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getMany",
+        "filters": {
+          "fields": "id, name, stock",
+          "maxStock": "={{$json['Low Stock Threshold']}}"
+        }
+      },
+      "type": "CUSTOM.shopware",
+      "typeVersion": 1,
+      "position": [
+        -1648,
+        256
+      ],
+      "id": "3f91681b-c0b4-4fb8-90f7-4686c94064e2",
+      "name": "Get Low Stock Products Per Project 2",
+      "credentials": {
+        "shopwareOAuth2Api": {
+          "id": "6nWvh4e9JVdcHJ9k",
+          "name": "Shopware account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1888,
+        -256
+      ],
+      "id": "b98e2933-8741-4583-a4c7-7739c13b4353",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const totalProjectProducts = $('Loop Over Project URLs').all().map(p => p.json).filter(p => p.project === $('Loop Over Projects').first().json['Project Name']);\n\nreturn [{totalProducts: totalProjectProducts.length}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1200,
+        -304
+      ],
+      "id": "7bbc4fbb-b7bd-4333-b3c3-cf9e65973896",
+      "name": "Filter Project Products"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  item.json.project = $('Switch Shopware Project Credentials').first().json[\"Project Name\"];\n    item.json.referenceLink = `${$('Switch Shopware Project Credentials').first().json.URL}/admin#/sw/product/detail/${item.json.id}/base`;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1440,
+        32
+      ],
+      "id": "e87edd35-1fce-4e85-aae0-7426fceb3ba2",
+      "name": "Serialize Products"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  item.json.project = $('Switch Shopware Project Credentials').first().json[\"Project Name\"];\n    item.json.referenceLink = `${$('Switch Shopware Project Credentials').first().json.URL}/admin#/sw/product/detail/${item.json.id}/base`;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1440,
+        256
+      ],
+      "id": "2c5285c0-a768-4e44-a953-ac08089835b3",
+      "name": "Serialize Products1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Project URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Project URLs": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Project URLs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Project URLs": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Loop Over Products",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch Shopware Project Credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Low Stock Project Record": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Projects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Low Stock Product Record/s": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Projects": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Filter Project Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Products": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get Low-Stock Project Record ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Shopware Project Credentials": {
+      "main": [
+        [
+          {
+            "node": "Get Low Stock Products Per Project 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Low Stock Products Per Project 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Low-Stock Project Record ID": {
+      "main": [
+        [
+          {
+            "node": "Create Low Stock Product Record/s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Low Stock Products Per Project 1": {
+      "main": [
+        [
+          {
+            "node": "Serialize Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Low Stock Products Per Project 2": {
+      "main": [
+        [
+          {
+            "node": "Serialize Products1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Projects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Project Products": {
+      "main": [
+        [
+          {
+            "node": "Create Low Stock Project Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Serialize Products": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Project URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Serialize Products1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Project URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2e0f80ff-1b24-4d9c-9bf6-900f0d40309a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c330522cb0d0cb7130dfa0abbe1ef63e5b79f2d2ab60d013c012bb1d1de14bab"
+  },
+  "id": "R59424rh0eI9QoNL",
+  "tags": []
+}
