@@ -4,7 +4,7 @@ import type {
 	IPollFunctions,
 	ILoadOptionsFunctions,
 	IHttpRequestMethods,
-	IRequestOptions,
+	IHttpRequestOptions,
 } from 'n8n-workflow';
 
 /**
@@ -30,13 +30,12 @@ export async function apiRequest(
 
 	query = query || {};
 
-	const options: IRequestOptions = {
+	const options: IHttpRequestOptions = {
 		headers: {},
 		method,
 		body,
 		qs: query,
-		uri: `${url}/api${endpoint}`,
-		useQuerystring: false,
+		url: `${url}/api${endpoint}`,
 		json: true,
 	};
 
@@ -48,5 +47,5 @@ export async function apiRequest(
 		delete options.body;
 	}
 
-	return await this.helpers.requestWithAuthentication.call(this, 'shopwareOAuth2Api', options);
+	return await this.helpers.httpRequestWithAuthentication.call(this, 'shopwareOAuth2Api', options);
 }
