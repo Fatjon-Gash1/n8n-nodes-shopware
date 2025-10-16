@@ -8,12 +8,12 @@
     "n8n-community-node-package"
   ],
   "author": {
-    "name": "Fatjon-Gash1",
-    "email": "fatjon.gashi.891@gmail.com"
+    "name": "Fatjon-Gashi1",
+    "email": "fatjon.gashi@solution25.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Fatjon-Gash1/n8n-nodes-shopware"
+    "url": "https://github.com/solution25com/n8n-nodes-shopware"
   },
   "scripts": {
     "build": "n8n-node build",
