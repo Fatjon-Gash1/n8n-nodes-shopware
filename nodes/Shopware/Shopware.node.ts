@@ -9,7 +9,7 @@ export class Shopware extends VersionedNodeType {
 			displayName: 'Shopware',
 			name: 'shopware',
 			// eslint-disable-next-line n8n-nodes-base/node-class-description-icon-not-svg
-			icon: 'file:../../../shopware.png',
+			icon: 'file:../../shopware.png',
 			group: ['input'],
 			description: 'Read, update, write and delete data from Shopware',
 			defaultVersion: 1,

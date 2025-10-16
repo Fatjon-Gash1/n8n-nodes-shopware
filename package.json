@@ -30,7 +30,9 @@
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
-    "credentials": [],
+    "credentials": [
+      "dist/credentials/ShopwareOAuth2Api.credentials.js"
+    ],
     "nodes": [
       "dist/nodes/Shopware/Shopware.node.js"
     ]
