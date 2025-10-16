@@ -103,16 +103,18 @@ If you encounter issues such as authentication errors, missing resources, or API
 
 ## Version History
 
-| Version         | Description                                                  |
-| --------------- | ------------------------------------------------------------ |
-| **0.1.0-alpha** | Pre-release with basic product, customer, and order support. |
-| **1.0.0**       | Initial release with full product resource support.          |
-| **1.1.0**       | Added full support for customer resource.                    |
-| **1.2.0**       | Added full support for order resource.                       |
-| **1.2.1**       | Fixed order creation using node-created customers.           |
-| **1.3.0**       | Added advanced filtering for all resources.                  |
-| **1.3.1**       | Added base unit testing for all resources.                   |
-| **1.4.0**       | Added full support for categories resource.                  |
+| Version         | Description                                                              |
+| --------------- | ------------------------------------------------------------------------ |
+| **0.1.0-alpha** | Pre-release with basic product, customer, and order support.             |
+| **1.0.0**       | Initial release with full product resource support.                      |
+| **1.1.0**       | Added full support for customer resource.                                |
+| **1.2.0**       | Added full support for order resource.                                   |
+| **1.2.1**       | Fixed order creation using node-created customers.                       |
+| **1.3.0**       | Added advanced filtering for all resources.                              |
+| **1.3.1**       | Added base unit testing for all resources.                               |
+| **1.4.0**       | Added full support for categories resource.                              |
+| **1.4.1**       | Removed deprecated transport method, options and types.                  |
+| **1.4.2**       | Fixed missing credentials in package definition and resolved icon paths. |
 
 ## Documentation Index
 
